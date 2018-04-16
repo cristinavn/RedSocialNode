@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <title>uoMusic</title>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css"/>
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.0/jquery.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+</head>
+<body>
+
+
+<!-- Barra de Navegación superior -->
+<nav class="navbar navbar-inverse">
+  <div class="container-fluid">
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#myNavbar">
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>                        
+      </button>
+      <img src="/img/logo.png" alt="logo"/>
+    </div>
+    <div class="collapse navbar-collapse" id="myNavbar">
+      <ul class="nav navbar-nav">
+        <li id="mTienda" class="active"><a href="/tienda">Tienda</a></li>
+		<li id="mPublicaciones"><a href="/publicaciones">Publicaciones</a></li>
+        <li id="mCompras"><a href="/compras">Compras</a></li>
+      </ul>
+      <ul class="nav navbar-nav navbar-right">
+	    <li><a href="/registrarse"><span class="glyphicon glyphicon-user"></span> Registrate</a></li>
+        <li><a href="/identificarse"><span class="glyphicon glyphicon-log-in"></span> Identifícate</a></li>
+      </ul>
+    </div>
+  </div>
+</nav>
+
+
+
+<div class="container">
+	<!-- Busqueda -->
+	<div class="row">
+		<div id="custom-search-input ">
+			<form method="get" action="/tienda" >
+			<div
+				class="input-group col-xs-8 col-sm-6 col-md-4 col-lg-5 pull-right">
+					<input type="text" class="search-query form-control"
+						placeholder="Nombre de la canción" name="busqueda"/>
+						<span class="input-group-btn">
+						<button class="btn" type="submit">
+							<span class="glyphicon glyphicon-search"></span>
+						</button>
+					</span>
+			</div>
+			</form>
+		</div>
+	</div>
+  
+
+  <h2>Canciones</h2>                                                                                    
+  <div class="row">
+  
+	  <!-- http://librosweb.es/libro/bootstrap_3/capitulo_2/tipos_de_rejillas.html -->
+	  <!-- Inicio del Bloque canción  -->
+	  {% for cancion in canciones %}
+	  <div class="col-xs-6 col-sm-6 col-md-4 col-lg-3">
+		  <div style="width:200px">
+			  <a href="/cancion/id">
+				<img src="/img/cancion1.png" alt="logo"/>
+				<!-- http://www.socicon.com/generator.php  -->
+				  <div>{{ cancion.nombre }} </div>
+				  <div class="small">{{ cancion.autor }} </div>
+				  <div class="text-right">{{ cancion.precio }} €</div>
+			 </a>
+		  </div>
+	  </div>
+	  {% endfor %}
+	  <!-- Fin del Bloque canción  -->
+   </div>
+  
+   <!-- Paginación mostrar la actual y 2 anteriores y dos siguientes -->
+   <div class="row text-center">
+	  <ul class="pagination">
+		<li class="page-item"><a class="page-link" href="#">Anterior</a></li>
+		<li class="page-item active"><a class="page-link" href="#">1</a></li>
+		<li class="page-item"><a class="page-link" href="#">2</a></li>
+		<li class="page-item"><a class="page-link" href="#">3</a></li>
+		<li class="page-item"><a class="page-link" href="#">4</a></li>
+		<li class="page-item"><a class="page-link" href="#">5</a></li>
+		<li class="page-item"><a class="page-link" href="#">Siguiente</a></li>
+	  </ul>
+	</div>
+</div>
+
+
+</body>
+</html>
