@@ -1,0 +1,12 @@
+<html>
+<head>
+<title>Canciones</title>
+</head>
+<body>
+	<h1>{{ vendedor }}</h1>
+	<ul>
+		{% for cancion in canciones %}
+		<li>{{ cancion.nombre }} - {{ cancion.precio }}</li> {% endfor %}
+	</ul>
+</body>
+</html>
