@@ -4,25 +4,29 @@ module.exports = function(app,swig,gestorBD) {
 		res.send("ver usuarios");
 	});
 
-    app.get("/registrarse", function(req, res) {
-        var respuesta = swig.renderFile('views/bregistro.html', {});
+    app.get("/signup", function(req, res) {
+        var respuesta = swig.renderFile('views/signup.html', {});
         res.send(respuesta);
     });
 
-    app.post('/usuario', function(req, res) {
-        var seguro = app.get("crypto").createHmac('sha256', app.get('clave'))
-            .update(req.body.password).digest('hex');
-        var usuario = {
-            email : req.body.email,
-            password : seguro
-        }
-        gestorBD.insertarUsuario(usuario, function(id) {
-            if (id == null){
-                res.redirect("/registrarse?mensaje=Error al registrar usuario")
-            } else {
-                res.redirect("/identificarse?mensaje=Nuevo usuario registrado");
+    app.post('/signup', function(req, res) {
+        if (req.body.password != req.body.passwordConfirm)
+            res.redirect("/signup?mensaje=Error al registrar usuario: las contraseñas no coinciden");
+        else {
+            var seguro = app.get("crypto").createHmac('sha256', app.get('clave'))
+                .update(req.body.password).digest('hex');
+            var usuario = {
+                email: req.body.email,
+                password: seguro
             }
-        });
+            gestorBD.insertarUsuario(usuario, function (id) {
+                if (id == null) {
+                    res.redirect("/signup?mensaje=Error al registrar usuario")
+                } else {
+                    res.redirect("/identificarse?mensaje=Nuevo usuario registrado");
+                }
+            });
+        }
     })
 
     app.get("/identificarse", function(req, res) {
