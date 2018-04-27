@@ -23,18 +23,18 @@ module.exports = function(app,swig,gestorBD) {
                 if (id == null) {
                     res.redirect("/signup?mensaje=Error al registrar usuario: ya existe el usuario&tipoMensaje=alert-danger")
                 } else {
-                    res.redirect("/identificarse?mensaje=Nuevo usuario registrado");
+                    res.redirect("/login?mensaje=Nuevo usuario registrado");
                 }
             });
         }
     })
 
-    app.get("/identificarse", function(req, res) {
-        var respuesta = swig.renderFile('views/bidentificacion.html', {});
+    app.get("/login", function(req, res) {
+        var respuesta = swig.renderFile('views/login.html', {});
         res.send(respuesta);
     });
 
-    app.post("/identificarse", function(req, res) {
+    app.post("/login", function(req, res) {
         var seguro = app.get("crypto").createHmac('sha256', app.get('clave'))
             .update(req.body.password).digest('hex');
         var criterio = {
@@ -44,7 +44,7 @@ module.exports = function(app,swig,gestorBD) {
         gestorBD.obtenerUsuarios(criterio, function(usuarios) {
             if (usuarios == null || usuarios.length == 0) {
                 req.session.usuario = null;
-                res.redirect("/identificarse" +
+                res.redirect("/login" +
                     "?mensaje=Email o password incorrecto"+
                     "&tipoMensaje=alert-danger ");
             } else {
