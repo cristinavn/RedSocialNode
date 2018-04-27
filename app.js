@@ -93,7 +93,7 @@ app.use(express.static('public'));
 
 //Variables
 app.set('port', 8081);;
-app.set('db', 'mongodb://admin:sdi@ds123933.mlab.com:23933/tiendamusica');
+app.set('db', 'mongodb://admin:sdi@ds119028.mlab.com:19028/redsocial');
 app.set('clave','abcdefg');
 app.set('crypto',crypto);
 

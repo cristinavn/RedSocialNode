@@ -116,11 +116,21 @@ module.exports = {
                 funcionCallback(null);
             } else {
                 var collection = db.collection('usuarios');
-                collection.insert(usuario, function(err, result) {
+                collection.find({email: usuario.email}).toArray(function(err, usuarios) {
                     if (err) {
                         funcionCallback(null);
                     } else {
-                        funcionCallback(result.ops[0]._id);
+                        if (usuarios == null || usuarios.length == 0) {
+                            collection.insert(usuario, function (err, result) {
+                                if (err) {
+                                    funcionCallback(null);
+                                } else {
+                                    funcionCallback(result.ops[0]._id);
+                                }
+                            });
+                        }
+                        else
+                            funcionCallback(null);
                     }
                     db.close();
                 });

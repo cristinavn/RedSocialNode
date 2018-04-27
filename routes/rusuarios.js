@@ -11,7 +11,7 @@ module.exports = function(app,swig,gestorBD) {
 
     app.post('/signup', function(req, res) {
         if (req.body.password != req.body.passwordConfirm)
-            res.redirect("/signup?mensaje=Error al registrar usuario: las contraseñas no coinciden");
+            res.redirect("/signup?mensaje=Error al registrar usuario: las contraseñas no coinciden&tipoMensaje=alert-danger");
         else {
             var seguro = app.get("crypto").createHmac('sha256', app.get('clave'))
                 .update(req.body.password).digest('hex');
@@ -21,7 +21,7 @@ module.exports = function(app,swig,gestorBD) {
             }
             gestorBD.insertarUsuario(usuario, function (id) {
                 if (id == null) {
-                    res.redirect("/signup?mensaje=Error al registrar usuario")
+                    res.redirect("/signup?mensaje=Error al registrar usuario: ya existe el usuario&tipoMensaje=alert-danger")
                 } else {
                     res.redirect("/identificarse?mensaje=Nuevo usuario registrado");
                 }
