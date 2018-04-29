@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+<head th:replace="fragments/head" />
+<body>
+
+	<!-- Barra de Navegación superior -->
+	<nav th:replace="fragments/nav" />
+
+	<div class="container">
+		<h2 th:text="#{user.details}"></h2>
+		<div class="panel panel-default">
+			<div class="panel-heading" th:text="#{user.dni}"></div>
+			<div class="panel-body" th:text="${user.dni}">28276</div>
+		</div>
+		<div class="panel panel-default">
+			<div class="panel-heading" th:text="#{user.name}"></div>
+			<div class="panel-body" th:text="${user.name}">
+				UO11111@uniovi.es</div>
+		</div>
+		<div class="panel panel-default">
+			<div class="panel-heading" th:text="#{user.lastName}"></div>
+			<div class="panel-body" th:text="${user.lastName}">100</div>
+		</div>
+	</div>
+
+	<footer th:replace="fragments/footer" />
+
+</body>
+</html>

@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+<head th:replace="fragments/head" />
+<body>
+	<!-- Barra de Navegación superior -->
+	<nav th:replace="fragments/nav" />
+	<div class="container">
+		<h2 th:text="#{friends.header}"></h2>
+		<p th:text="#{friends.intro}">Listado de amigos</p>
+		<div class="table-responsive">
+			<table class="table table-hover" th:fragment="tableInvitations" id="tableInvitations">
+				<thead>
+					<tr>
+						<th class="col-md-4" th:text="#{user.name}">Nombre</th>
+						<th th:text="#{user.email}">Email</th>
+					</tr>
+				</thead>
+				<tbody>
+					<tr th:each="user : ${friends}">
+						<td  class="text-left" ><a th:text="${user.name}"  th:href="@{'/post/' + ${user.id} + '/list'}"></a></td>
+						<td  class="text-left" th:text="${user.email}">cris@x.es</td>
+					</tr>
+				</tbody>
+			</table>
+		</div>
+		<footer th:replace="fragments/pagination" />
+	</div>
+	<footer th:replace="fragments/footer" />
+</body>
+</html>
