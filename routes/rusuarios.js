@@ -1,7 +1,23 @@
 module.exports = function(app,swig,gestorBD) {
 	
-	app.get("/usuarios", function(req, res) {
-		res.send("ver usuarios");
+	app.get("/usuario", function(req, res) {
+        var pg = parseInt(req.query.pg); // Es String !!!
+        if ( req.query.pg == null){ // Puede no venir el param
+            pg = 1;
+        }
+		gestorBD.obtenerUsuariosPg({},pg,function (usuarios,total) {
+            var pgUltima = total/4;
+            if (total % 4 > 0 ){ // Sobran decimales
+                pgUltima = pgUltima+1;
+            }
+            var respuesta = swig.renderFile('views/busuarios.html',
+                {
+                    usuarios:usuarios,
+                    pgActual : pg,
+                    pgUltima : pgUltima
+                });
+            res.send(respuesta);
+        })
 	});
 
     app.get("/signup", function(req, res) {
@@ -17,7 +33,8 @@ module.exports = function(app,swig,gestorBD) {
                 .update(req.body.password).digest('hex');
             var usuario = {
                 email: req.body.email,
-                password: seguro
+                password: seguro,
+                nombre: req.body.name
             }
             gestorBD.insertarUsuario(usuario, function (id) {
                 if (id == null) {
