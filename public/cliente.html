@@ -1,0 +1,63 @@
+<html lang="en">
+<head>
+  <title>jQuery uoMusic </title>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css"/>
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.0/jquery.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+  <script src="/js/cookie.js"></script>
+</head>
+<body>
+
+<!-- Barra de Navegación superior -->
+<nav class="navbar navbar-inverse">
+  <div class="container-fluid">
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#myNavbar">
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>                        
+      </button>
+      <img src="/img/logo.png" alt="logo"/> 
+    </div>
+    <div class="collapse navbar-collapse" id="myNavbar">
+      <ul class="nav navbar-nav" id="barra-menu">
+        <li><a onclick=widgetCanciones()>Canciones</a></li>
+      </ul>
+      <ul class="nav navbar-nav navbar-right" id="barra-menu-derecha">
+		<!-- Opciones de menú aqui -->
+      </ul>
+    </div>
+  </div>
+</nav>
+
+
+<!-- Contenido -->
+<div class="container" id="contenedor-principal"> <!--  id para identificar -->
+
+</div>
+<script>
+    var token;
+    var URLbase = "http://localhost:8081/api";
+    $( "#contenedor-principal" ).load( "widget-login.html");
+    if ( Cookies.get('token') != null ){
+        token = Cookies.get('token');
+
+        var url = new URL(window.location.href);
+        var w = url.searchParams.get("w");
+        switch(w){
+            case "login":
+                $( "#contenedor-principal" ).load("widget-login.html");
+                break;
+            case "canciones":
+                $( "#contenedor-principal" ).load("widget-canciones.html");
+                break;
+            default:
+                $( "#contenedor-principal" ).load( "widget-canciones.html");
+        }
+
+    }
+</script>
+</body>
+</html>
