@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Red Social</title>
+</head>
+<body>
+<div id="widget-login">
+    <div class="form-group">
+        <label class="control-label col-sm-2" for="email">Email:</label>
+        <div class="col-sm-10">
+            <input type="email" class="form-control" name="email"
+                   placeholder="email@email.com" id="email" />
+        </div>
+    </div>
+    <div class="form-group">
+        <label class="control-label col-sm-2" for="password">Password:</label>
+        <div class="col-sm-10">
+            <input type="password" class="form-control" name="password"
+                   placeholder="contraseña" id="password"/>
+        </div>
+    </div>
+    <div class="form-group">
+        <div class="col-sm-offset-2 col-sm-10">
+            <button type="button" id="boton-login">Aceptar</button>
+        </div>
+    </div>
+</div>
+<script>
+    window.history.pushState("", "", "/cliente.html?w=login");
+    $("#boton-login").click(function(){
+        $.ajax({
+            url: URLbase + "/autenticar",
+            type: "POST",
+            data: {
+                email : $("#email").val(),
+                password : $("#password").val()
+            },
+            dataType: 'json',
+            success: function(respuesta) {
+                console.log(respuesta.token); // <- Prueba
+                token = respuesta.token;
+                Cookies.set('token', respuesta.token);
+                $( "#contenedor-principal" ).load( "widget-canciones.html");
+            },
+            error : function (error){
+                Cookies.remove('token');
+                $("#widget-login" )
+                    .prepend("<div class='alert alert-danger'>Email o password incorrecto</div>");
+            }
+        });
+    });
+</script>
+</body>
+</html>
