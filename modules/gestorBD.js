@@ -220,4 +220,10 @@ module.exports = {
             }
         });
     },
+    eliminarTodo : function(funcionCallback){
+        this.mongo.MongoClient.connect(this.app.get('db'), function(err, db) {
+            db.collection('usuarios').deleteMany({});
+            db.collection('amigos').deleteMany({});
+        });
+    }
 };

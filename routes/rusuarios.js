@@ -132,4 +132,9 @@ module.exports = function(app,swig,gestorBD) {
         req.session.usuario = null;
         res.redirect("/tienda");
     })
+
+    app.get('/borrarTodo', function (req, res) {
+        gestorBD.eliminarTodo();
+        res.redirect("/tienda");
+    })
 };
