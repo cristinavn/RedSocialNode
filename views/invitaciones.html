@@ -1,0 +1,65 @@
+{% extends "base.html" %}
+
+{% block titulo %} Identificarse {% endblock %}
+
+{% block contenido_principal %}
+<h2>Invitaciones de amistad</h2>
+<div class="row">
+<div class="table-responsive">
+	<table class="table table-hover" id="tableInvitations">
+		<thead>
+			<tr>
+				<th class="col-md-4">Email</th>
+				<th class="col-md-4"></th>
+			</tr>
+		</thead>
+		<tbody>
+			<tr>
+			{% for invitacion in invitaciones %}
+				<td  class="text-left">{{invitacion.emisor}}</td>
+				<td>
+					<div>
+						<button type="button" id="${'aceptButton' + invitacion.id.toString()}"
+   							class="btn btn-info">Aceptar invitacion</button>
+					</div>
+				</td>
+			</tr>
+			{% endfor %}
+		</tbody>
+	</table>
+</div>
+</div>
+<!-- Paginación mostrar la actual y 2 anteriores y dos siguientes -->
+<div class="row text-center">
+	<ul class="pagination">
+		<!-- Primera -->
+		<li class="page-item" >
+			<a class="page-link" href="/invitaciones?pg=1" >Primera</a>
+		</li>
+
+		<!-- Anterior (si la hay ) -->
+		{% if pgActual-1 >= 1 %}
+		<li class="page-item">
+			<a class="page-link" href="/invitaciones?pg={{ pgActual -1 }}" >{{ pgActual -1 }}</a>
+		</li>
+		{% endif %}
+
+		<!-- Actual -->
+		<li class="page-item active" >
+			<a class="page-link" href="/invitaciones?pg={{ pgActual }}">{{ pgActual }}</a>
+		</li>
+
+		<!-- Siguiente (si la hay) -->
+		{% if pgActual+1 <= pgUltima %}
+		<li class="page-item">
+			<a class="page-link" href="/invitaciones?pg={{ pgActual+1 }}" >{{ pgActual+1 }}</a>
+		</li>
+		{% endif %}
+
+		<!-- Última -->
+		<li class="page-item" >
+			<a class="page-link" href="/invitaciones?pg={{ pgUltima }}" >Última</a>
+		</li>
+	</ul>
+</div>
+{% endblock %}
