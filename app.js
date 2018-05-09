@@ -82,7 +82,7 @@ routerUsuarioSession.use(function(req, res, next) {
 //Aplicar routerUsuarioSession
 app.use("/canciones/agregar",routerUsuarioSession);
 app.use("/publicaciones",routerUsuarioSession);
-app.use("/cancion/comprar",routerUsuarioSession);
+app.use("/invitaciones",routerUsuarioSession);
 app.use("/usuario",routerUsuarioSession);
 
 //routerUsuarioAutor
@@ -150,7 +150,7 @@ require("./routes/rcanciones.js")(app, swig, gestorBD);
 require("./routes/rapiusuarios.js")(app, gestorBD);
 
 app.get('/', function (req, res) {
-    res.redirect('/tienda');
+    res.redirect('/login');
 })
 
 app.use( function (err, req, res, next ) {
