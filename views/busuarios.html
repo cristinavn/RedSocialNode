@@ -4,6 +4,8 @@
 
 {% block contenido_principal %}
 <!-- Búsqueda -->
+
+<h2>Lista de usuarios</h2>
 <div class="row">
     <div id="custom-search-input ">
         <form method="get" action="/usuario" >
@@ -12,16 +14,14 @@
                 <input type="text" class="search-query form-control"
                        placeholder="Nombre de usuario" name="busqueda"/>
                 <span class="input-group-btn">
-<button class="btn" type="submit">
-<span class="glyphicon glyphicon-search"></span>
-</button>
-</span>
+                    <button class="btn" type="submit">
+                        <span class="glyphicon glyphicon-search"></span>
+                    </button>
+                </span>
             </div>
         </form>
     </div>
 </div>
-
-<h2>Listado usuarios</h2>
 <div class="row">
     <!-- http://librosweb.es/libro/bootstrap_3/capitulo_2/tipos_de_rejillas.html -->
     <!-- Inicio del Bloque canción -->
@@ -37,7 +37,24 @@
             {% for usuario in usuarios %}
             <tr>
                 <td  class="text-left" >{{ usuario.nombre }}</td>
-                <td  class="text-left" >{{ usuario.email }}</td>
+                <td  id="email" class="text-left" >{{ usuario.email }}</td>
+                <td  class="text-left" >
+                    {% if usuario.email != user %}
+                        {% set added = 'false' %}
+                        {% for invitacion in invitaciones %}
+                            {% if invitacion.receptor == usuario.email %}
+                                <p id="pSended">Invitación enviada</p>
+                                {% set added = 'true' %}
+                            {% elseif invitacion.emisor == usuario.email %}
+                                {% set added = 'true' %}
+                            {% endif %}
+                        {% endfor %}
+                        {% if added == 'false' %}
+                            <button type="button" id="sendButton" class="btn btn-info"
+                                onclick="enviarInvitacion('{{usuario.email}}')">Agregar Amigo</button>
+                        {% endif %}
+                    {% endif %}
+                </td>
             </tr>
             {% endfor %}
             </tbody>
@@ -78,5 +95,16 @@
         </li>
     </ul>
 </div>
+<script>
+    function enviarInvitacion(texts){
+        $.ajax({
+            url: "http://localhost:8081/invitacion/"+texts, type: "GET", data: {},
+            dataType: 'json',
+            success: function(respuesta) {
+               location.reload();
+            },
+        });
+    }
 
+</script>
 {% endblock %}

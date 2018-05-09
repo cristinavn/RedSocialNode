@@ -9,20 +9,53 @@ module.exports = function(app,swig,gestorBD) {
         if ( req.query.pg == null){ // Puede no venir el param
             pg = 1;
         }
-		gestorBD.obtenerUsuariosPg( criterio,pg,function (usuarios,total) {
-            var pgUltima = total/4;
-            if (total % 4 > 0 ){ // Sobran decimales
-                pgUltima = pgUltima+1;
+
+        gestorBD.obtenerInvitaciones({ $or: [ { emisor: req.session.usuario}, { receptor: req.session.usuario } ] } , function(invitaciones){
+            var peticionesAmistad;
+            if (invitaciones != null){
+                peticionesAmistad = invitaciones;
             }
-            var respuesta = swig.renderFile('views/busuarios.html',
-                {
-                    usuarios:usuarios,
-                    pgActual : pg,
-                    pgUltima : pgUltima
-                });
-            res.send(respuesta);
+            gestorBD.obtenerUsuariosPg( criterio,pg,function (usuarios,total) {
+
+                var pgUltima = total/4;
+                if (total % 4 > 0 ){ // Sobran decimales
+                    pgUltima = pgUltima+1;
+                }
+                var respuesta = swig.renderFile('views/busuarios.html',
+                    {
+                        usuarios:usuarios,
+                        user: req.session.usuario,
+                        pgActual: pg,
+                        pgUltima: pgUltima,
+                        invitaciones:  peticionesAmistad
+                    });
+                res.send(respuesta);
+            })
         })
+
 	});
+
+	app.get("/invitacion/:email", function (req, res) {
+        var invitacion = {
+            emisor: req.session.usuario,
+            receptor: req.params.email,
+            acepatada: false
+        }
+        gestorBD.insertarInvitacion(invitacion, function (id) {
+            if (id == null) {
+                res.status(500);
+                res.json({
+                    error : "se ha producido un error"
+                })
+            } else {
+                res.status(201);
+                res.json({
+                    mensaje : "invitacion enviada",
+                    _id : id
+                })
+            }
+        })
+    })
 
     app.get("/signup", function(req, res) {
         var respuesta = swig.renderFile('views/signup.html', {});
@@ -70,12 +103,12 @@ module.exports = function(app,swig,gestorBD) {
                     "&tipoMensaje=alert-danger ");
             } else {
                 req.session.usuario = usuarios[0].email;
-                res.redirect("/publicaciones");
+                res.redirect("/usuario");
             }
         });
     });
 
-    app.get('/desconectarse', function (req, res) {
+    app.get('/logout', function (req, res) {
         req.session.usuario = null;
         res.redirect("/tienda");
     })

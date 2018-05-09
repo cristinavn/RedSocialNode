@@ -156,35 +156,45 @@ module.exports = {
             }
         });
     },
-    obtenerCanciones : function(criterio, funcionCallback){
-    this.mongo.MongoClient.connect(this.app.get('db'), function(err, db) {
-        if (err) {
-            funcionCallback(null);
-        } else {
-            var collection = db.collection('canciones');
-            collection.find(criterio).toArray(function(err, canciones) {
-                if (err) {
-                    funcionCallback(null);
-                } else {
-                    funcionCallback(canciones);
-                }
-                db.close();
-            });
-        }
-    });
-},
 
-insertarCancion : function(cancion, funcionCallback) {
+    insertarInvitacion : function(invitacion, funcionCallback) {
         this.mongo.MongoClient.connect(this.app.get('db'), function(err, db) {
             if (err) {
                 funcionCallback(null);
             } else {
-                var collection = db.collection('canciones');
-                collection.insert(cancion, function(err, result) {
+                var collection = db.collection('amigos');
+                collection.find({emisor : invitacion.emisor, receptor: invitacion.receptor})
+                    .toArray(function (err, invitaciones) {
+                        if (err) {
+                            funcionCallback(null);
+                        } else {
+                            if (invitaciones == null || invitaciones.length == 0) {
+                                collection.insert(invitacion, function(err, result) {
+                                    if (err) {
+                                        funcionCallback(null);
+                                    } else {
+                                        funcionCallback(result.ops[0]._id);
+                                    }
+                                });
+                            } else
+                                funcionCallback(null);
+                        }
+                        db.close();
+                    });
+            }
+        });
+    },
+    obtenerInvitaciones : function(criterio, funcionCallback){
+        this.mongo.MongoClient.connect(this.app.get('db'), function(err, db) {
+            if (err) {
+                funcionCallback(null);
+            } else {
+                var collection = db.collection('amigos');
+                collection.find(criterio).toArray(function(err, invitaciones) {
                     if (err) {
                         funcionCallback(null);
                     } else {
-                        funcionCallback(result.ops[0]._id);
+                        funcionCallback(invitaciones);
                     }
                     db.close();
                 });
