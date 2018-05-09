@@ -20,7 +20,7 @@
 				<td>
 					<div>
 						<button type="button" id="${'aceptButton' + invitacion.id.toString()}"
-   							class="btn btn-info">Aceptar invitacion</button>
+								onclick="aceptarInvitacion('{{invitacion.emisor}}')" class="btn btn-info">Aceptar invitacion</button>
 					</div>
 				</td>
 			</tr>
@@ -62,4 +62,16 @@
 		</li>
 	</ul>
 </div>
+<script>
+    function aceptarInvitacion(texts){
+        $.ajax({
+            url: "http://localhost:8081/invitacion/acept/"+texts, type: "POST", data: {},
+            dataType: 'json',
+            success: function(respuesta) {
+                location.reload();
+            },
+        });
+    }
+
+</script>
 {% endblock %}

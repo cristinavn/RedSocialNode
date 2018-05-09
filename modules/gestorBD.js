@@ -225,5 +225,23 @@ module.exports = {
             db.collection('usuarios').deleteMany({});
             db.collection('amigos').deleteMany({});
         });
-    }
+    },
+    aceptarInvitacion : function(criterio, funcionCallback) {
+        this.mongo.MongoClient.connect(this.app.get('db'), function(err, db) {
+            if (err) {
+                funcionCallback(null);
+            } else {
+                var collection = db.collection('amigos');
+                var atributo = {aceptada:true};
+                collection.update(criterio, {$set: atributo}, function(err, result) {
+                    if (err) {
+                        funcionCallback(null);
+                    } else {
+                        funcionCallback(result);
+                    }
+                    db.close();
+                });
+            }
+        });
+    },
 };

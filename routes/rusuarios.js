@@ -40,7 +40,7 @@ module.exports = function(app,swig,gestorBD) {
         if ( req.query.pg == null){ // Puede no venir el param
             pg = 1;
         }
-        gestorBD.obtenerInvitacionesPg( { receptor: req.session.usuario, acepatada: false } ,pg,function (invitaciones,total){
+        gestorBD.obtenerInvitacionesPg( { receptor: req.session.usuario, aceptada: false } ,pg,function (invitaciones,total){
             var pgUltima = total/5;
             if (total % 5 > 0 ){ // Sobran decimales
                 pgUltima = pgUltima+1;
@@ -55,11 +55,31 @@ module.exports = function(app,swig,gestorBD) {
         })
     });
 
-	app.get("/invitacion/:email", function (req, res) {
+    app.post("/invitacion/acept/:email", function (req, res) {
+        var criterio = {
+            emisor: req.params.email
+        }
+        gestorBD.aceptarInvitacion(criterio, function (id) {
+            if (id == null) {
+                res.status(500);
+                res.json({
+                    error : "se ha producido un error"
+                })
+            } else {
+                res.status(201);
+                res.json({
+                    mensaje : "invitacion aceptada",
+                    _id : id
+                })
+            }
+        })
+    })
+
+    app.post("/invitacion/:email", function (req, res) {
         var invitacion = {
             emisor: req.session.usuario,
             receptor: req.params.email,
-            acepatada: false
+            aceptada: false
         }
         gestorBD.insertarInvitacion(invitacion, function (id) {
             if (id == null) {
@@ -76,6 +96,8 @@ module.exports = function(app,swig,gestorBD) {
             }
         })
     })
+
+
 
     app.get("/signup", function(req, res) {
         var respuesta = swig.renderFile('views/signup.html', {});
