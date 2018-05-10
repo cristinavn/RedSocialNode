@@ -15,11 +15,50 @@
 					</tr>
 				</thead>
 				<tbody>
-				{% for amigo in amigos %}
-						<td  class="text-left" >{{amigo,nombre}}</td>
-						<td  class="text-left" >{{amigo.email}}</td>
+				{% for invitacion in invitaciones %}
+				<tr>
+					{% if invitacion.receptor === user %}
+					<td  class="text-left" >{{invitacion.emisorNombre}}</td>
+					<td  class="text-left" >{{invitacion.emisor}}</td>
+					{% elseif invitacion.emisor === user %}
+					<td  class="text-left" >{{invitacion.receptorNombre}}</td>
+					<td  class="text-left" >{{invitacion.receptor}}</td>
+					{% endif %}
 					</tr>
+				{% endfor %}
 				</tbody>
 			</table>
 		</div>
+<div class="row text-center">
+	<ul class="pagination">
+		<!-- Primera -->
+		<li class="page-item" >
+			<a class="page-link" href="/usuario?pg=1" >Primera</a>
+		</li>
+
+		<!-- Anterior (si la hay ) -->
+		{% if pgActual-1 >= 1 %}
+		<li class="page-item">
+			<a class="page-link" href="/usuario?pg={{ pgActual -1 }}" >{{ pgActual -1 }}</a>
+		</li>
+		{% endif %}
+
+		<!-- Actual -->
+		<li class="page-item active" >
+			<a class="page-link" href="/usuario?pg={{ pgActual }}">{{ pgActual }}</a>
+		</li>
+
+		<!-- Siguiente (si la hay) -->
+		{% if pgActual+1 <= pgUltima %}
+		<li class="page-item">
+			<a class="page-link" href="/usuario?pg={{ pgActual+1 }}" >{{ pgActual+1 }}</a>
+		</li>
+		{% endif %}
+
+		<!-- Última -->
+		<li class="page-item" >
+			<a class="page-link" href="/usuario?pg={{ pgUltima }}" >Última</a>
+		</li>
+	</ul>
+</div>
 {% endblock %}

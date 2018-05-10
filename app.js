@@ -83,6 +83,8 @@ routerUsuarioSession.use(function(req, res, next) {
 app.use("/canciones/agregar",routerUsuarioSession);
 app.use("/publicaciones",routerUsuarioSession);
 app.use("/invitaciones",routerUsuarioSession);
+app.use("/invitacion",routerUsuarioSession);
+app.use("/amigos",routerUsuarioSession);
 app.use("/usuario",routerUsuarioSession);
 
 //routerUsuarioAutor

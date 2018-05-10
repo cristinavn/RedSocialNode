@@ -54,13 +54,14 @@ module.exports = function(app,swig,gestorBD) {
             res.send(respuesta);
         })
     });
-/*
+
     app.get("/amigos", function(req, res){
         var pg = parseInt(req.query.pg); // Es String !!!
         if ( req.query.pg == null){ // Puede no venir el param
             pg = 1;
         }
-        gestorBD.obtenerAmistadesPg( req.session.usuario,pg,function (amigos,total){
+        var criterio = {$and:[{$or:[{emisor:req.session.usuario},{receptor:req.session.usuario}]},{aceptada:true}]}
+        gestorBD.obtenerAmistadesPg( criterio,pg,function (invitaciones,total){
             var pgUltima = total/5;
             if (total % 5 > 0 ){ // Sobran decimales
                 pgUltima = pgUltima+1;
@@ -69,12 +70,13 @@ module.exports = function(app,swig,gestorBD) {
                 {
                     pgActual:pg,
                     pgUltima:pgUltima,
-                    amigos:amigos
+                    invitaciones:invitaciones,
+                    user:req.session.usuario
                 });
             res.send(respuesta);
         })
     });
-*/
+
     app.post("/invitacion/acept/:email", function (req, res) {
         var criterio = {
             emisor: req.params.email
@@ -96,25 +98,38 @@ module.exports = function(app,swig,gestorBD) {
     })
 
     app.get("/invitacion/:email", function (req, res) {
-        var invitacion = {
-            emisor: req.session.usuario,
-            receptor: req.params.email,
-            aceptada: false
-        }
-        gestorBD.insertarInvitacion(invitacion, function (id) {
-            if (id == null) {
-                res.status(500);
-                res.json({
-                    error : "se ha producido un error"
-                })
-            } else {
-                res.status(201);
-                res.json({
-                    mensaje : "invitacion enviada",
-                    _id : id
-                })
-            }
-        })
+        var emisor="GUARDAR NOMBRE";
+        var receptor="GUARDAR NOMBRE";
+        gestorBD.obtenerUsuario({email:req.session.usuario},function (nombre) {
+            emisor=nombre;
+
+            gestorBD.obtenerUsuario({email:req.params.email},function (nombre) {
+                receptor=nombre;
+                var invitacion = {
+                    emisor: req.session.usuario,
+                    emisorNombre:emisor,
+                    receptor: req.params.email,
+                    receptorNombre:receptor,
+                    aceptada: false
+                }
+                gestorBD.insertarInvitacion(invitacion, function (id) {
+                    if (id == null) {
+                        res.status(500);
+                        res.json({
+                            error : "se ha producido un error"
+                        })
+                    } else {
+                        res.status(201);
+                        res.json({
+                            mensaje : "invitacion enviada",
+                            _id : id
+                        });
+                    }
+                });
+            });
+        });
+
+
     })
 
 
