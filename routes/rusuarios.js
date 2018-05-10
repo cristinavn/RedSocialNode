@@ -95,7 +95,7 @@ module.exports = function(app,swig,gestorBD) {
         })
     })
 
-    app.post("/invitacion/:email", function (req, res) {
+    app.get("/invitacion/:email", function (req, res) {
         var invitacion = {
             emisor: req.session.usuario,
             receptor: req.params.email,
