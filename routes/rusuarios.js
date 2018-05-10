@@ -100,17 +100,17 @@ module.exports = function(app,swig,gestorBD) {
     app.get("/invitacion/:email", function (req, res) {
         gestorBD.obtenerUsuario({email:req.session.usuario},function (usuario) {
             var emisor=usuario.nombre;
-            var eid = usuario._id;
+            var eid = usuario._id.toString();
             gestorBD.obtenerUsuario({email:req.params.email},function (usuario) {
                 var receptor=usuario.nombre;
-                var rid= usuario._id;
+                var rid= usuario._id.toString();
                 var invitacion = {
                     emisor: req.session.usuario,
                     emisorNombre:emisor,
-                    emisorId: eid,
+                    emisorId: gestorBD.mongo.ObjectID(eid),
                     receptor: req.params.email,
                     receptorNombre:receptor,
-                    receptorId: rid,
+                    receptorId: gestorBD.mongo.ObjectID(rid),
                     aceptada: false
                 }
                 gestorBD.insertarInvitacion(invitacion, function (id) {
