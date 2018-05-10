@@ -98,27 +98,38 @@ module.exports = function(app,swig,gestorBD) {
     })
 
     app.get("/invitacion/:email", function (req, res) {
-        var invitacion = {
-            emisor: req.session.usuario,
-            emisorNombre:"GUARDAR NOMBRE",
-            receptor: req.params.email,
-            emisorNombre:"GUARDAR NOMBRE",
-            aceptada: false
-        }
-        gestorBD.insertarInvitacion(invitacion, function (id) {
-            if (id == null) {
-                res.status(500);
-                res.json({
-                    error : "se ha producido un error"
-                })
-            } else {
-                res.status(201);
-                res.json({
-                    mensaje : "invitacion enviada",
-                    _id : id
-                })
-            }
-        })
+        var emisor="GUARDAR NOMBRE";
+        var receptor="GUARDAR NOMBRE";
+        gestorBD.obtenerUsuario({email:req.session.usuario},function (nombre) {
+            emisor=nombre;
+
+            gestorBD.obtenerUsuario({email:req.params.email},function (nombre) {
+                receptor=nombre;
+                var invitacion = {
+                    emisor: req.session.usuario,
+                    emisorNombre:emisor,
+                    receptor: req.params.email,
+                    receptorNombre:receptor,
+                    aceptada: false
+                }
+                gestorBD.insertarInvitacion(invitacion, function (id) {
+                    if (id == null) {
+                        res.status(500);
+                        res.json({
+                            error : "se ha producido un error"
+                        })
+                    } else {
+                        res.status(201);
+                        res.json({
+                            mensaje : "invitacion enviada",
+                            _id : id
+                        });
+                    }
+                });
+            });
+        });
+
+
     })
 
 
