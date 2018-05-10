@@ -104,7 +104,7 @@ module.exports = {
                         funcionCallback(null);
                     } else {
                         if ( usuarios.length == 1) {
-                                    funcionCallback(usuarios[0].nombre);
+                                    funcionCallback(usuarios[0]);
                         }
                         else {
                             funcionCallback(null);
@@ -278,6 +278,25 @@ module.exports = {
                 var collection = db.collection('amigos');
                 collection.count(criterio, function (err,count) {
                     collection.find(criterio).skip((pg-1)*5).limit(5).toArray(function(err, invitaciones) {
+                        if (err) {
+                            funcionCallback(null);
+                        } else {
+                            funcionCallback(invitaciones,count);
+                        }
+                        db.close();
+                    });
+                });
+            }
+        });
+    },
+    obtenerAmistades : function(criterio,funcionCallback){
+        this.mongo.MongoClient.connect(this.app.get('db'), function(err, db) {
+            if (err) {
+                funcionCallback(null);
+            } else {
+                var collection = db.collection('amigos');
+                collection.count(criterio, function (err,count) {
+                    collection.find(criterio).toArray(function(err, invitaciones) {
                         if (err) {
                             funcionCallback(null);
                         } else {

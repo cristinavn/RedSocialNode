@@ -74,7 +74,30 @@ module.exports = function(app, gestorBD){
             }
         });
     });
+    app.get("/api/amigo", function(req, res) {
+        var criterio = {$and:[{$or:[{emisor:req.usuario},{receptor:req.usuario}]},{aceptada:true}]}
+        var heyn= "hey";
+        gestorBD.obtenerAmistades(criterio,function(invitaciones){
+            if ( invitaciones == null ){
+                res.status(500);
+                res.json({
+                    error : "se ha producido un error"
+                })
+            } else {
+                res.status(200);
+                var amigos=[];
+                invitaciones.forEach(function(invitacion){
+                    if(invitacion.receptor===req.usuario){
+                        amigos.push(invitacion.emisorNombre);
+                    }else if (invitacion.emisor === req.usuario){
+                        amigos.push(invitacion.receptorNombre);
+                    }
+                });
+                res.send( JSON.stringify(amigos) );
+            }
+        });
 
+    });
     app.post("/api/cancion", function(req, res) {
         var cancion = {
             nombre : req.body.nombre,
