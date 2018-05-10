@@ -1,6 +1,6 @@
 module.exports = function(app,swig,gestorBD) {
 
-	app.post("/cancion", function(req, res) {
+	app.post("/amigos", function(req, res) {
         if ( req.session.usuario == null){
             res.redirect("/tienda");
             return;
@@ -40,7 +40,7 @@ module.exports = function(app,swig,gestorBD) {
         });
 	});
 
-    app.get('/canciones/agregar', function (req, res) {
+    app.get('/amigos/agregar', function (req, res) {
         if ( req.session.usuario == null){
             res.redirect("/tienda");
             return;
@@ -50,7 +50,7 @@ module.exports = function(app,swig,gestorBD) {
         res.send(respuesta);
     })
 
-	app.get('/cancion/:id', function (req, res) {
+	app.get('/amigos/:id', function (req, res) {
 	    var criterio = { "_id" : gestorBD.mongo.ObjectID(req.params.id) };
 	    gestorBD.obtenerCanciones(criterio,function(canciones){
 	        if ( canciones == null ){
@@ -65,7 +65,7 @@ module.exports = function(app,swig,gestorBD) {
 	    });
 	})
 
-	app.get('/canciones/:genero/:id', function(req, res) {
+	app.get('/amigos/:genero/:id', function(req, res) {
 		var respuesta = 'id: ' + req.params.id + '<br>' + 'Genero: ' + req.params.genero;
 		res.send(respuesta);
 	})
@@ -135,7 +135,7 @@ module.exports = function(app,swig,gestorBD) {
         });
     });
 
-    app.get('/cancion/modificar/:id', function (req, res) {
+    app.get('/amigos/modificar/:id', function (req, res) {
         var criterio = { "_id" : gestorBD.mongo.ObjectID(req.params.id) };
         gestorBD.obtenerCanciones(criterio,function(canciones){
             if ( canciones == null ){
@@ -150,7 +150,7 @@ module.exports = function(app,swig,gestorBD) {
         });
     })
 
-    app.get('/cancion/eliminar/:id', function (req, res) {
+    app.get('/amigos/eliminar/:id', function (req, res) {
         var criterio = { "_id" : gestorBD.mongo.ObjectID(req.params.id) };
         gestorBD.eliminarCancion(criterio,function(canciones){
             if ( canciones == null ){
@@ -161,7 +161,7 @@ module.exports = function(app,swig,gestorBD) {
         });
     })
 
-    app.get('/cancion/comprar/:id', function (req, res) {
+    app.get('/amigos/comprar/:id', function (req, res) {
         var cancionId = gestorBD.mongo.ObjectID(req.params.id);
         var compra = {
             usuario : req.session.usuario,
@@ -198,7 +198,7 @@ module.exports = function(app,swig,gestorBD) {
         });
     })
 
-    app.post('/cancion/modificar/:id', function (req, res) {
+    app.post('/amigos/modificar/:id', function (req, res) {
         var id = req.params.id;
         var criterio = { "_id" : gestorBD.mongo.ObjectID(id) };
         var cancion = {
