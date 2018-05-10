@@ -21,7 +21,7 @@
 				<td  class="text-left">{{invitacion.emisor}}</td>
 				<td>
 					<div>
-						<button type="button" id="${'aceptButton' + invitacion.id.toString()}"
+						<button type="button" id="aceptButton{{invitacion.emisor}}"
 								onclick="aceptarInvitacion('{{invitacion.emisor}}')" class="btn btn-info">Aceptar invitacion</button>
 					</div>
 				</td>

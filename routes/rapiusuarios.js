@@ -75,8 +75,7 @@ module.exports = function(app, gestorBD){
         });
     });
     app.get("/api/amigo", function(req, res) {
-        var criterio = {$and:[{$or:[{emisor:req.usuario},{receptor:req.usuario}]},{aceptada:true}]}
-        var heyn= "hey";
+        var criterio = {$and:[{$or:[{emisor:res.usuario},{receptor:res.usuario}]},{aceptada:true}]};
         gestorBD.obtenerAmistades(criterio,function(invitaciones){
             if ( invitaciones == null ){
                 res.status(500);
@@ -87,10 +86,10 @@ module.exports = function(app, gestorBD){
                 res.status(200);
                 var amigos=[];
                 invitaciones.forEach(function(invitacion){
-                    if(invitacion.receptor===req.usuario){
-                        amigos.push(invitacion.emisorNombre);
-                    }else if (invitacion.emisor === req.usuario){
-                        amigos.push(invitacion.receptorNombre);
+                    if(invitacion.receptor===res.usuario){
+                        amigos.push(invitacion.emisorId);
+                    }else if (invitacion.emisor === res.usuario){
+                        amigos.push(invitacion.receptorId);
                     }
                 });
                 res.send( JSON.stringify(amigos) );

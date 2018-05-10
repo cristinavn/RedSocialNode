@@ -46,7 +46,7 @@ routerUsuarioToken.use(function(req, res, next) {
                     acceso : false,
                     error: 'Token invalido o caducado'
                 });
-                res.usuario=infoToken.usuario;
+                //res.usuario=infoToken.usuario;
                 return;
 
             } else {
