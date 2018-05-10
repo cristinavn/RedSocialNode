@@ -226,21 +226,52 @@ module.exports = {
             db.collection('amigos').deleteMany({});
         });
     },
-    obtenerCanciones : function(criterio, funcionCallback){
+
+    aceptarInvitacion : function(criterio, funcionCallback) {
+
         this.mongo.MongoClient.connect(this.app.get('db'), function(err, db) {
             if (err) {
                 funcionCallback(null);
             } else {
-                var collection = db.collection('canciones');
-                collection.find(criterio).toArray(function(err, canciones) {
+                var collection = db.collection('amigos');
+                var atributo = {aceptada:true};
+                collection.update(criterio, {$set: atributo}, function(err, result) {
                     if (err) {
                         funcionCallback(null);
                     } else {
-                        funcionCallback(canciones);
+                        funcionCallback(result);
+
                     }
                     db.close();
                 });
             }
         });
-    }
+    },
+    /*
+    obtenerAmistadesPg : function(usuario,pg,funcionCallback){
+        this.mongo.MongoClient.connect(this.app.get('db'), function(err, db) {
+            if (err) {
+                funcionCallback(null);
+            } else {
+                var collection = db.collection('amigos');
+                var criterio={$and:[{$or:[{emisor:usuario},{receptor:usuario}]},{aceptada:true}]};
+                collection.count(criterio, function (err,count) {
+                    collection.find(criterio).skip((pg-1)*5).limit(5).toArray(function(err, invitaciones) {
+                        if (err) {
+                            funcionCallback(null);
+                        } else {
+                            var amigos=[];
+                            invitaciones.forEach(function (invitacion) {
+                                if(invitacion.receptor===usuario) {amigos.add({email:invitacion.emisor});}
+                                else {amigos.add({email:invitacion.receptor});}
+                            });
+                            funcionCallback(amigos,count);
+                        }
+                        db.close();
+                    });
+                });
+            }
+        });
+    }*/
+
 };
