@@ -288,6 +288,23 @@ module.exports = {
                 });
             }
         });
+    },
+    obtenerAmistades : function(criterio,funcionCallback){
+        this.mongo.MongoClient.connect(this.app.get('db'), function(err, db) {
+            if (err) {
+                funcionCallback(null);
+            } else {
+                var collection = db.collection('amigos');
+                collection.find(criterio).toArray(function(err, invitaciones) {
+                    if (err) {
+                        funcionCallback(null);
+                    } else {
+                        funcionCallback(invitaciones);
+                    }
+                    db.close();
+                });
+            }
+        });
     }
 
 };
