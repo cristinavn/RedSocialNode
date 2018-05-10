@@ -226,7 +226,9 @@ module.exports = {
             db.collection('amigos').deleteMany({});
         });
     },
+
     aceptarInvitacion : function(criterio, funcionCallback) {
+
         this.mongo.MongoClient.connect(this.app.get('db'), function(err, db) {
             if (err) {
                 funcionCallback(null);
@@ -238,6 +240,7 @@ module.exports = {
                         funcionCallback(null);
                     } else {
                         funcionCallback(result);
+
                     }
                     db.close();
                 });
@@ -270,4 +273,5 @@ module.exports = {
             }
         });
     }*/
+
 };
