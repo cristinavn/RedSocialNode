@@ -54,7 +54,27 @@ module.exports = function(app,swig,gestorBD) {
             res.send(respuesta);
         })
     });
-
+/*
+    app.get("/amigos", function(req, res){
+        var pg = parseInt(req.query.pg); // Es String !!!
+        if ( req.query.pg == null){ // Puede no venir el param
+            pg = 1;
+        }
+        gestorBD.obtenerAmistadesPg( req.session.usuario,pg,function (amigos,total){
+            var pgUltima = total/5;
+            if (total % 5 > 0 ){ // Sobran decimales
+                pgUltima = pgUltima+1;
+            }
+            var respuesta = swig.renderFile('views/friends.html',
+                {
+                    pgActual:pg,
+                    pgUltima:pgUltima,
+                    amigos:amigos
+                });
+            res.send(respuesta);
+        })
+    });
+*/
     app.post("/invitacion/acept/:email", function (req, res) {
         var criterio = {
             emisor: req.params.email
