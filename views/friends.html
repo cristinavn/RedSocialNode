@@ -15,15 +15,10 @@
 					</tr>
 				</thead>
 				<tbody>
-				{% for invitacion in invitaciones %}
+				{% for amistad in amistades %}
 				<tr>
-					{% if invitacion.receptor === user %}
-					<td  class="text-left" >{{invitacion.emisorNombre}}</td>
-					<td  class="text-left" >{{invitacion.emisor}}</td>
-					{% elseif invitacion.emisor === user %}
-					<td  class="text-left" >{{invitacion.receptorNombre}}</td>
-					<td  class="text-left" >{{invitacion.receptor}}</td>
-					{% endif %}
+					<td  class="text-left" >{{amistad.nombre}}</td>
+					<td  class="text-left" >{{amistad.email}}</td>
 					</tr>
 				{% endfor %}
 				</tbody>

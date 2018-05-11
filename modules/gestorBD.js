@@ -270,18 +270,27 @@ module.exports = {
         });
     },
 
-    obtenerAmistadesPg : function(criterio,pg,funcionCallback){
+    obtenerAmistadesPg : function(usuario,pg,funcionCallback){
         this.mongo.MongoClient.connect(this.app.get('db'), function(err, db) {
             if (err) {
                 funcionCallback(null);
             } else {
                 var collection = db.collection('amigos');
+                var criterio = {$and:[{$or:[{emisor:usuario},{receptor:usuario}]},{aceptada:true}]};
                 collection.count(criterio, function (err,count) {
                     collection.find(criterio).skip((pg-1)*5).limit(5).toArray(function(err, invitaciones) {
                         if (err) {
                             funcionCallback(null);
                         } else {
-                            funcionCallback(invitaciones,count);
+                            var amigos=[];
+                            invitaciones.forEach(function(invitacion){
+                                if(invitacion.receptor===usuario){
+                                    amigos.push({_id:invitacion.emisorId,nombre: invitacion.emisorNombre,email: invitacion.emisor});
+                                }else if (invitacion.emisor === usuario){
+                                    amigos.push({id:invitacion.receptorId,nombre: invitacion.receptorNombre,email:invitacion.receptor});
+                                }
+                            });
+                            funcionCallback(amigos,count);
                         }
                         db.close();
                     });
@@ -289,22 +298,52 @@ module.exports = {
             }
         });
     },
-    obtenerAmistades : function(criterio,funcionCallback){
+    obtenerAmistades : function(usuario,funcionCallback){
         this.mongo.MongoClient.connect(this.app.get('db'), function(err, db) {
             if (err) {
                 funcionCallback(null);
             } else {
                 var collection = db.collection('amigos');
-
+                var criterio = {$and:[{$or:[{emisor:usuario},{receptor:usuario}]},{aceptada:true}]};
                 collection.find(criterio).toArray(function(err, invitaciones) {
                     if (err) {
                         funcionCallback(null);
                     } else {
-                        funcionCallback(invitaciones);
+                        var amigos=[];
+                        invitaciones.forEach(function(invitacion){
+                            if(invitacion.receptor===usuario){
+                                amigos.push({_id:invitacion.emisorId,nombre: invitacion.emisorNombre,email: invitacion.emisor});
+                            }else if (invitacion.emisor === usuario){
+                                amigos.push({id:invitacion.receptorId,nombre: invitacion.receptorNombre,email:invitacion.receptor});
+                            }
+                        });
+                        funcionCallback(amigos);
+
+                        db.close();
                     }
-                    db.close();
-                });
+        });
+    }
+    });
+    },
+    enviarMensaje: function (mensaje, funcionCallback) {
+        this.mongo.MongoClient.connect(this.app.get('db'), function(err, db) {
+            if (err) {
+                funcionCallback(null);
+            } else {
+                    if (err) {
+                        funcionCallback(null);
+                    } else {
+                        var collection = db.collection('mensajes');
+                            collection.insert(mensaje, function (err, result) {
+                                if (err) {
+                                    funcionCallback(null);
+                                } else {
+                                    funcionCallback(result.ops[0]._id);
+                                }
+                                db.close();
+                            });
             }
+        }
         });
     }
 

@@ -1,8 +1,8 @@
 module.exports = function(app, gestorBD){
 
     app.get("/api/amigos", function(req,res){
-        var criterio = {$and:[{$or:[{emisor:res.usuario},{receptor:res.usuario}]},{aceptada:true}]};
-        gestorBD.obtenerAmistades( criterio, function(amistades) {
+
+        gestorBD.obtenerAmistades( res.usuario, function(amistades) {
             if (amistades == null) {
                 res.status(500);
                 res.json( {
@@ -10,15 +10,7 @@ module.exports = function(app, gestorBD){
                 })
             } else {
                 res.status(200);
-                var amigos=[];
-                amistades.forEach(function(invitacion){
-                    if(invitacion.receptor===res.usuario){
-                       amigos.push({_id:invitacion.emisorId,nombre: invitacion.emisorNombre,email: invitacion.emisor});
-                    }else if (invitacion.emisor === res.usuario){
-                      amigos.push({id:invitacion.receptorId,nombre: invitacion.receptorNombre,email:invitacion.receptor});
-                    }
-                });
-                res.send( JSON.stringify(amigos) );
+                res.send( JSON.stringify(amistades) );
             }
         })
 
@@ -50,5 +42,37 @@ module.exports = function(app, gestorBD){
                 });
             }
         });
+    });
+    app.post("/api/mensaje/", function(req,res) {
+        var mensaje={
+            emisor:res.usuario,
+            destino: req.body.destino,
+            texto:req.body.texto,
+            leido:false
+        };
+        gestorBD.obtenerAmistades(mensaje.emisor, function (amigos) {
+            var isAmigo=false;
+            amigos.forEach(function (amigo) {
+                if(amigo.email===mensaje.destino) isAmigo=true;
+            });
+            if(isAmigo) {
+                gestorBD.enviarMensaje(mensaje, function (id) {
+                    if (id == null) {
+                        res.status(500);
+                        res.json({error: "se ha producido un error"});
+                    } else {
+                        res.status(201);
+                        res.json({
+                            mensaje: "Se ha insertdao el mensaje",
+                            _id: id
+                        });
+                    }
+                });
+            }else{
+                res.status(500);
+                res.json({error: "no son amigos"});
+            }
+        })
+
     });
 }
