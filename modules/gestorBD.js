@@ -246,6 +246,7 @@ module.exports = {
         this.mongo.MongoClient.connect(this.app.get('db'), function(err, db) {
             db.collection('usuarios').deleteMany({});
             db.collection('amigos').deleteMany({});
+            db.collection('mensajes').remove({texto:"ivan"});
         });
     },
 
@@ -357,6 +358,25 @@ module.exports = {
                         funcionCallback(null);
                     } else {
                         funcionCallback(mensajes);
+                    }
+                    db.close();
+                });
+            }
+        });
+    },
+    leerMensajes: function (criterio, funcionCallback) {
+        this.mongo.MongoClient.connect(this.app.get('db'), function(err, db) {
+            if (err) {
+                funcionCallback(null);
+            } else {
+                var collection = db.collection('mensajes');
+                var atributo = {leido:true};
+                collection.update(criterio, {$set: atributo}, function(err, result) {
+                    if (err) {
+                        funcionCallback(null);
+                    } else {
+                        funcionCallback(result);
+
                     }
                     db.close();
                 });
