@@ -60,8 +60,7 @@ module.exports = function(app,swig,gestorBD) {
         if ( req.query.pg == null){ // Puede no venir el param
             pg = 1;
         }
-        var criterio = {$and:[{$or:[{emisor:req.session.usuario},{receptor:req.session.usuario}]},{aceptada:true}]}
-        gestorBD.obtenerAmistadesPg( criterio,pg,function (invitaciones,total){
+        gestorBD.obtenerAmistadesPg( req.session.usuario,pg,function (amistades,total){
             var pgUltima = total/5;
             if (total % 5 > 0 ){ // Sobran decimales
                 pgUltima = pgUltima+1;
@@ -70,7 +69,7 @@ module.exports = function(app,swig,gestorBD) {
                 {
                     pgActual:pg,
                     pgUltima:pgUltima,
-                    invitaciones:invitaciones,
+                    amistades:amistades,
                     user:req.session.usuario
                 });
             res.send(respuesta);
