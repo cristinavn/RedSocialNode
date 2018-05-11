@@ -104,7 +104,7 @@ module.exports = {
                         funcionCallback(null);
                     } else {
                         if ( usuarios.length == 1) {
-                                    funcionCallback(usuarios[0].nombre);
+                                    funcionCallback(usuarios[0]);
                         }
                         else {
                             funcionCallback(null);
@@ -295,6 +295,7 @@ module.exports = {
                 funcionCallback(null);
             } else {
                 var collection = db.collection('amigos');
+
                 collection.find(criterio).toArray(function(err, invitaciones) {
                     if (err) {
                         funcionCallback(null);

@@ -46,7 +46,7 @@ routerUsuarioToken.use(function(req, res, next) {
                     acceso : false,
                     error: 'Token invalido o caducado'
                 });
-                // También podríamos comprobar que intoToken.usuario existe
+                //res.usuario=infoToken.usuario;
                 return;
 
             } else {
@@ -65,6 +65,7 @@ routerUsuarioToken.use(function(req, res, next) {
     }
 });
 // Aplicar routerUsuarioToken
+
 app.use('/api/amigos', routerUsuarioToken);
 
 // routerUsuarioSession
