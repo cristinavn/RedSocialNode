@@ -13,13 +13,9 @@ module.exports = function(app, gestorBD){
                 var amigos=[];
                 amistades.forEach(function(invitacion){
                     if(invitacion.receptor===res.usuario){
-                       amigos.push(invitacion.emisorId);
-                        amigos.push({nombre: invitacion.emisorNombre});
-                        amigos.push({email: invitacion.emisor});
+                       amigos.push({_id:invitacion.emisorId,nombre: invitacion.emisorNombre,email: invitacion.emisor});
                     }else if (invitacion.emisor === res.usuario){
-                      amigos.push(invitacion.receptorId);
-                        amigos.push({nombre: invitacion.receptorNombre});
-                        amigos.push({email:invitacion.receptor});
+                      amigos.push({id:invitacion.receptorId,nombre: invitacion.receptorNombre,email:invitacion.receptor});
                     }
                 });
                 res.send( JSON.stringify(amigos) );
