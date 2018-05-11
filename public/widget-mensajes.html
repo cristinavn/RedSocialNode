@@ -11,6 +11,13 @@
         </tbody>
     </table>
 </div>
+<div class="form-group">
+    <p><input type="text" class="form-control" name="mensaje"
+           placeholder="Mensaje" id="mensaje" />
+    <button type="button" class="form-control" id="send" onclick="enviar()">Enviar</button></p>
+
+</div>
+
 <script>
     window.history.pushState("", "", "/cliente.html?w=mensajes");
     function recarga(){
@@ -38,6 +45,25 @@
                             "<td></td><td>"+mensaje.texto+"</td>" +
                             "</tr>" );
                     }});
+            },
+            error : function(error) {
+                $("#contenedor-principal").load("widget-login.html");
+            }
+        })
+    }
+    function enviar(){
+        $.ajax({
+            url : URLbase + "/mensaje/",
+            type : "POST",
+            data : {
+                destino : emailSeleccionada,
+                texto : $("#mensaje").val()},
+            dataType : 'json',
+            headers : {
+                "token" : token
+            },
+            success : function(mensajes) {
+                recarga();
             },
             error : function(error) {
                 $("#contenedor-principal").load("widget-login.html");
