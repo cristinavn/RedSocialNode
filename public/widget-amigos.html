@@ -48,8 +48,8 @@
         $( "#tablaCuerpo" ).empty(); // Vaciar la tabla
         for (i = 0; i < cancionesMostrar.length; i++) {
             $( "#tablaCuerpo" ).append(
-                "<tr id="+cancionesMostrar[i]._id+">"+
-                "<td>"+cancionesMostrar[i].nombre+"</td>" +
+                "<tr>"+
+                "<td><a id="+cancionesMostrar[i].email+" onclick=mostrarMensajes('"+cancionesMostrar[i].email+"')>"+cancionesMostrar[i].nombre+"</a></td>" +
                 "<td>"+cancionesMostrar[i].email+"</td>" +
                 "</tr>" );
             // Mucho cuidado con las comillas del eliminarCancion
@@ -71,6 +71,10 @@
         actualizarTabla(cancionesFiltradas);
     });
 
+    function mostrarMensajes(email) {
+        emailSeleccionada = email;
+        $("#contenedor-principal").load("widget-mensajes.html");
+    }
 
 
 </script></script>
