@@ -26,9 +26,8 @@ tmp/
 nbproject/private/
 build/
 nbbuild/
-dist/
-nbdist/
 .nb-gradle/
+node_modules/base64url/dist/.gitkeep
 
 ### Compiled class file ###
 *.class

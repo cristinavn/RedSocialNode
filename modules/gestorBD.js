@@ -295,15 +295,14 @@ module.exports = {
                 funcionCallback(null);
             } else {
                 var collection = db.collection('amigos');
-                collection.count(criterio, function (err,count) {
-                    collection.find(criterio).toArray(function(err, invitaciones) {
-                        if (err) {
-                            funcionCallback(null);
-                        } else {
-                            funcionCallback(invitaciones,count);
-                        }
-                        db.close();
-                    });
+
+                collection.find(criterio).toArray(function(err, invitaciones) {
+                    if (err) {
+                        funcionCallback(null);
+                    } else {
+                        funcionCallback(invitaciones);
+                    }
+                    db.close();
                 });
             }
         });
