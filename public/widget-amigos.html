@@ -9,7 +9,6 @@
     <h2>Lista de amigos</h2>
     <input type="text" class="form-control" placeholder="Filtrar por nombre"
            id="filtro-nombre"/>
-    <button class="btn" onclick="cargarCanciones()" >Actualizar</button>
     <table class="table table-hover">
         <thead>
         <tr>
@@ -62,10 +61,10 @@
 
     $('#filtro-nombre').on('input',function(e){
         var cancionesFiltradas = [];
-        var nombreFiltro = $("#filtro-nombre").val();
+        var nombreFiltro = $("#filtro-nombre").val().toLowerCase();
 
-        for (i = 0; i < canciones.length; i+=2) {
-            if (canciones[i].nombre.indexOf(nombreFiltro) != -1 ){
+        for (i = 0; i < canciones.length; i++) {
+            if (canciones[i].nombre.toLowerCase().indexOf(nombreFiltro) != -1 ){
                 cancionesFiltradas.push(canciones[i]);
             }
         }
