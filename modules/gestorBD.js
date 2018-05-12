@@ -5,94 +5,6 @@ module.exports = {
         this.mongo = mongo;
         this.app = app;
     },
-    obtenerCancionesPg : function(criterio,pg,funcionCallback){
-        this.mongo.MongoClient.connect(this.app.get('db'), function(err, db) {
-            if (err) {
-                funcionCallback(null);
-            } else {
-                var collection = db.collection('canciones');
-                collection.count(function(err, count){
-                    collection.find(criterio).skip( (pg-1)*4 ).limit( 4 )
-                        .toArray(function(err, canciones) {
-                            if (err) {
-                                funcionCallback(null);
-                            } else {
-                                funcionCallback(canciones, count);
-                            }
-                            db.close();
-                        });
-                });
-            }
-        });
-    },
-    obtenerCompras : function(criterio,funcionCallback){
-        this.mongo.MongoClient.connect(this.app.get('db'), function(err, db) {
-            if (err) {
-                funcionCallback(null);
-            } else {
-                var collection = db.collection('compras');
-                collection.find(criterio).toArray(function(err, usuarios) {
-                    if (err) {
-                        funcionCallback(null);
-                    } else {
-                        funcionCallback(usuarios);
-                    }
-                    db.close();
-                });
-            }
-        });
-    },
-    insertarCompra: function(compra, funcionCallback) {
-        this.mongo.MongoClient.connect(this.app.get('db'), function(err, db) {
-            if (err) {
-                funcionCallback(null);
-            } else {
-                var collection = db.collection('compras');
-                collection.insert(compra, function(err, result) {
-                    if (err) {
-                        funcionCallback(null);
-                    } else {
-                        funcionCallback(result.ops[0]._id);
-                    }
-                    db.close();
-                });
-            }
-        });
-    },
-    eliminarCancion : function(criterio, funcionCallback) {
-        this.mongo.MongoClient.connect(this.app.get('db'), function(err, db) {
-            if (err) {
-                funcionCallback(null);
-            } else {
-                var collection = db.collection('canciones');
-                collection.remove(criterio, function(err, result) {
-                    if (err) {
-                        funcionCallback(null);
-                    } else {
-                        funcionCallback(result);
-                    }
-                    db.close();
-                });
-            }
-        });
-    },
-    modificarCancion : function(criterio, cancion, funcionCallback) {
-        this.mongo.MongoClient.connect(this.app.get('db'), function(err, db) {
-            if (err) {
-                funcionCallback(null);
-            } else {
-                var collection = db.collection('canciones');
-                collection.update(criterio, {$set: cancion}, function(err, result) {
-                    if (err) {
-                        funcionCallback(null);
-                    } else {
-                        funcionCallback(result);
-                    }
-                    db.close();
-                });
-            }
-        });
-    },
     obtenerUsuario : function(criterio,funcionCallback){
         this.mongo.MongoClient.connect(this.app.get('db'), function(err, db) {
             if (err) {
@@ -246,7 +158,7 @@ module.exports = {
         this.mongo.MongoClient.connect(this.app.get('db'), function(err, db) {
             //db.collection('usuarios').deleteMany({});
             db.collection('usuarios').remove({email:{$nin:["ivan@prueba.es", "maria@prueba.es", "sara@prueba.es", "ana@prueba.es"]}});
-            db.collection('amigos').deleteMany({});
+            db.collection('amigos').remove({emisor:{$nin:["edu@prueba.es"]}});
             db.collection('mensajes').remove({texto:"Ivan"});
             db.collection('mensajes').remove({texto:"Encantada de conocerte"});
         });

@@ -74,7 +74,7 @@ module.exports = function(app, gestorBD){
                     autenticado: true,
                     token : token
                 });
-                console.log("usuario "+ criterio.email+ " login");
+                console.log("usuario login");
             }
         });
     });

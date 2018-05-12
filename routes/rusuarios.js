@@ -1,7 +1,6 @@
 module.exports = function(app,swig,gestorBD) {
 	
 	app.get("/usuario", function(req, res) {
-        console.log("obteniendo usuarios");
         var criterio = {};
         if( req.query.busqueda != null ){
             criterio = { $or :[{"nombre" : {$regex : ".*"+req.query.busqueda+".*"}},{"email": {$regex : ".*"+req.query.busqueda+".*"}}]};
@@ -37,7 +36,6 @@ module.exports = function(app,swig,gestorBD) {
 	});
 
 	app.get("/invitaciones", function(req, res){
-        console.log("obteniendo invitaciones");
         var pg = parseInt(req.query.pg); // Es String !!!
         if ( req.query.pg == null){ // Puede no venir el param
             pg = 1;
@@ -58,7 +56,6 @@ module.exports = function(app,swig,gestorBD) {
     });
 
     app.get("/amigos", function(req, res){
-        console.log("obteniendo amigos");
         var pg = parseInt(req.query.pg); // Es String !!!
         if ( req.query.pg == null){ // Puede no venir el param
             pg = 1;
@@ -188,12 +185,12 @@ module.exports = function(app,swig,gestorBD) {
                 req.session.usuario = usuarios[0].email;
                 res.redirect("/usuario");
             }
-            console.log("usuario "+usuarios[0].email+" acaba de acceder");
+            console.log("login usuario");
         });
     });
 
     app.get('/logout', function (req, res) {
-        console.log("usuario "+ req.session.usuario+" logout");
+        console.log("logout usuario");
         req.session.usuario = null;
         res.redirect("/login");
     })
