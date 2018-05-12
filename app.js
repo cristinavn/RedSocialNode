@@ -88,56 +88,7 @@ app.use("/invitacion",routerUsuarioSession);
 app.use("/amigos",routerUsuarioSession);
 app.use("/usuario",routerUsuarioSession);
 
-//routerUsuarioAutor
-var routerUsuarioAutor = express.Router();
-routerUsuarioAutor.use(function(req, res, next) {
-    console.log("routerUsuarioAutor");
-    var path = require('path');
-    var id = path.basename(req.originalUrl);
-// Cuidado porque req.params no funciona
-// en el router si los params van en la URL.
-    gestorBD.obtenerCanciones(
-        { _id : mongo.ObjectID(id) }, function (canciones) {
-            console.log(canciones[0]);
-            if(canciones[0].autor == req.session.usuario ){
-                next();
-            } else {
-                res.redirect("/tienda");
-            }
-        })
-});
-//Aplicar routerUsuarioAutor
-app.use("/cancion/modificar",routerUsuarioAutor);
-app.use("/cancion/eliminar",routerUsuarioAutor);
 
-//routerAudios
-var routerAudios = express.Router();
-routerAudios.use(function(req, res, next) {
-    console.log("routerAudios");
-    var path = require('path');
-    var idCancion = path.basename(req.originalUrl, '.mp3');
-    gestorBD.obtenerCanciones(
-        { _id : mongo.ObjectID(idCancion) }, function (canciones) {
-            if( canciones[0].autor == req.session.usuario ){
-                next();
-            } else {
-                var criterio = {
-                    usuario : req.session.usuario,
-                    cancionId : mongo.ObjectID(idCancion)
-                };
-
-                gestorBD.obtenerCompras(criterio ,function(compras){
-                    if (compras != null && compras.length > 0 ){
-                        next();
-                    } else {
-                        res.redirect("/tienda");
-                    }
-                });
-            }
-        })
-});
-//Aplicar routerAudios
-app.use("/audios/",routerAudios);
 
 app.use(express.static('public'));
 
@@ -149,7 +100,6 @@ app.set('crypto',crypto);
 
 //Rutas/controladores por lógica
 require("./routes/rusuarios.js")(app, swig, gestorBD);
-require("./routes/rcanciones.js")(app, swig, gestorBD);
 require("./routes/rapiusuarios.js")(app, gestorBD);
 
 app.get('/', function (req, res) {
