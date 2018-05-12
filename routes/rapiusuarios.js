@@ -1,7 +1,7 @@
 module.exports = function(app, gestorBD){
 
     app.get("/api/usuarios", function(req,res){
-
+        console.log("obteniendo usuarios api");
         gestorBD.obtenerAmistades( res.usuario, function(amistades) {
             if (amistades == null) {
                 res.status(500);
@@ -17,6 +17,7 @@ module.exports = function(app, gestorBD){
     });
 
     app.get("/api/mensajes/:email", function (req, res) {
+        console.log("obtener mensajes");
         var criterio = {$or:[{$and:[{emisor:res.usuario, destino:req.params.email}]},
                     {$and:[{emisor:req.params.email, destino:res.usuario}]}]};
         gestorBD.obtenerMensajes( criterio, function(mensajes) {
@@ -32,6 +33,7 @@ module.exports = function(app, gestorBD){
         })
     });
     app.post("/api/mensajes/:email", function (req, res) {
+        console.log("leer mensajes");
         var criterio = {$and:[{destino:res.usuario, emisor:req.params.email}]};
         gestorBD.leerMensajes( criterio, function(mensajes) {
             if (mensajes == null) {
@@ -72,10 +74,12 @@ module.exports = function(app, gestorBD){
                     autenticado: true,
                     token : token
                 });
+                console.log("usuario "+ criterio.email+ " login");
             }
         });
     });
     app.post("/api/mensaje/", function(req,res) {
+        console.log("enviando mensaje");
         var mensaje={
             emisor:res.usuario,
             destino: req.body.destino,
