@@ -11,8 +11,10 @@
         </tbody>
     </table>
 </div>
+<div id="leer">
+</div>
 <div class="form-group">
-    <p><input type="text" class="input-group" name="mensaje"
+    <p><input type="text"  name="mensaje"
            placeholder="Mensaje" id="mensaje" />
     <button type="button" class="btn btn-info" id="send" onclick="enviar()">Enviar</button></p>
 
@@ -23,6 +25,18 @@
     function recarga(){
         $.ajax({
             url : URLbase + "/mensajes/" + emailSeleccionada,
+            type : "POST",
+            data : {},
+            dataType : 'json',
+            headers : {
+                "token" : token
+            },
+            error : function(error) {
+                $("#contenedor-principal").load("widget-login.html");
+            }
+        });
+        $.ajax({
+            url : URLbase + "/mensajes/" + emailSeleccionada,
             type : "GET",
             data : {},
             dataType : 'json',
@@ -31,6 +45,7 @@
             },
             success : function(mensajes) {
                 $("#tablaCuerpo").empty();
+                var leidos = [];
                 mensajes.forEach(function (mensaje) {
                     if(mensaje.emisor===emailSeleccionada){
                         $( "#tablaCuerpo" ).append(
@@ -44,12 +59,15 @@
                             "<td></td>" +
                             "<td></td><td>"+mensaje.texto+"</td>" +
                             "</tr>" );
+                        leidos.push(mensaje.leido);
                     }});
+                $("#leer").empty();
+                if(leidos[leidos.length-1])$( "#leer" ).append("<p>LEIDO</p>");
             },
             error : function(error) {
                 $("#contenedor-principal").load("widget-login.html");
             }
-        })
+        });
     }
     function enviar(){
         $.ajax({
