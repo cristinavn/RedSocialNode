@@ -27,17 +27,17 @@
 
 <script>
     window.history.pushState("", "", "/cliente.html?w=amigos");
-    var canciones;
-    function cargarCanciones(){
+    var amigos;
+    function cargarAmigos(){
         $.ajax({
-            url: URLbase + "/amigos",
+            url: URLbase + "/usuarios",
             type: "GET",
             data: { },
             dataType: 'json',
             headers: { "token": token },
             success: function(respuesta) {
-                canciones = respuesta;
-                actualizarTabla(canciones);
+                amigos = respuesta;
+                actualizarTabla(amigos);
             },
             error : function (error){
                 $( "#contenedor-principal" ).load("widget-login.html");
@@ -52,25 +52,23 @@
                 "<td>"+cancionesMostrar[i].nombre+"</td>" +
                 "<td>"+cancionesMostrar[i].email+"</td>" +
                 "</tr>" );
-            // Mucho cuidado con las comillas del eliminarCancion
-            //la id tiene que ir entre comillas ' '
         }
     }
 
-    cargarCanciones();
+    cargarAmigos();
 
     $('#filtro-nombre').on('input',function(e){
-        var cancionesFiltradas = [];
+        var amigosFiltrados = [];
         var nombreFiltro = $("#filtro-nombre").val().toLowerCase();
 
         for (i = 0; i < canciones.length; i++) {
             if (canciones[i].nombre.toLowerCase().indexOf(nombreFiltro) != -1 ){
-                cancionesFiltradas.push(canciones[i]);
+                amigosFiltrados.push(canciones[i]);
             }
         }
-        actualizarTabla(cancionesFiltradas);
+        actualizarTabla(amigosFiltrados);
     });
 
 
 
-</script></script>
+</script>

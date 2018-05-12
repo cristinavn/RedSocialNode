@@ -66,7 +66,7 @@ routerUsuarioToken.use(function(req, res, next) {
 });
 // Aplicar routerUsuarioToken
 
-app.use('/api/amigos', routerUsuarioToken);
+app.use('/api/usuarios', routerUsuarioToken);
 app.use('/api/mensaje', routerUsuarioToken);
 app.use('/api/mensajes', routerUsuarioToken);
 
@@ -83,8 +83,6 @@ routerUsuarioSession.use(function(req, res, next) {
     }
 });
 //Aplicar routerUsuarioSession
-app.use("/canciones/agregar",routerUsuarioSession);
-app.use("/publicaciones",routerUsuarioSession);
 app.use("/invitaciones",routerUsuarioSession);
 app.use("/invitacion",routerUsuarioSession);
 app.use("/amigos",routerUsuarioSession);

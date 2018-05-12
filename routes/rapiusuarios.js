@@ -1,6 +1,6 @@
 module.exports = function(app, gestorBD){
 
-    app.get("/api/amigos", function(req,res){
+    app.get("/api/usuarios", function(req,res){
 
         gestorBD.obtenerAmistades( res.usuario, function(amistades) {
             if (amistades == null) {
