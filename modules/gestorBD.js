@@ -371,7 +371,7 @@ module.exports = {
             } else {
                 var collection = db.collection('mensajes');
                 var atributo = {leido:true};
-                collection.update(criterio, {$set: atributo}, function(err, result) {
+                collection.updateMany(criterio, {$set: atributo}, function(err, result) {
                     if (err) {
                         funcionCallback(null);
                     } else {
