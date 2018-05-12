@@ -1,0 +1,95 @@
+<div id="widget-detalles" >
+    <div id="cabecera"></div>
+    <table class="table table-hover">
+        <thead>
+        <tr id = tablaCabecera>
+
+        </tr>
+        </thead>
+        <tbody id="tablaCuerpo">
+
+        </tbody>
+    </table>
+</div>
+<div id="leer">
+</div>
+<div class="form-group">
+    <p><input type="text"  name="mensaje"
+           placeholder="Mensaje" id="mensaje" />
+    <button type="button" class="btn btn-info" id="send" onclick="enviar()">Enviar</button></p>
+</div>
+
+<script>
+    window.history.pushState("", "", "/cliente.html?w=mensajes");
+    function recarga(){
+        $.ajax({
+            url : URLbase + "/mensajes/" + emailSeleccionada,
+            type : "POST",
+            data : {},
+            dataType : 'json',
+            headers : {
+                "token" : token
+            },
+            error : function(error) {
+                $("#contenedor-principal").load("widget-login.html");
+            }
+        });
+        $.ajax({
+            url : URLbase + "/mensajes/" + emailSeleccionada,
+            type : "GET",
+            data : {},
+            dataType : 'json',
+            headers : {
+                "token" : token
+            },
+            success : function(mensajes) {
+                $("#tablaCuerpo").empty();
+                var leidos = [];
+                mensajes.forEach(function (mensaje) {
+                    if(mensaje.emisor===emailSeleccionada){
+                        $( "#tablaCuerpo" ).append(
+                            "<tr>"+
+                            "<td>"+mensaje.texto+"</td>" +
+                            "<td></td><td></td>" +
+                            "</tr>" );
+                    }else if(mensaje.destino===emailSeleccionada){
+                        $( "#tablaCuerpo" ).append(
+                            "<tr>"+
+                            "<td></td>" +
+                            "<td></td><td>"+mensaje.texto+"</td>" +
+                            "</tr>" );
+                        leidos.push(mensaje.leido);
+                    }});
+                $("#leer").empty();
+                if(leidos[leidos.length-1])$( "#leer" ).append("<p>LEIDO</p>");
+            },
+            error : function(error) {
+                $("#contenedor-principal").load("widget-login.html");
+            }
+        });
+    }
+    function enviar(){
+        $.ajax({
+            url : URLbase + "/mensaje/",
+            type : "POST",
+            data : {
+                destino : emailSeleccionada,
+                texto : $("#mensaje").val()},
+            dataType : 'json',
+            headers : {
+                "token" : token
+            },
+            success : function(mensajes) {
+                $("#mensaje").val("");
+                recarga();
+            },
+            error : function(error) {
+                $("#contenedor-principal").load("widget-login.html");
+            }
+        })
+    }
+    $("#cabecera").append("<h2>"+"Mensajes de "+emailSeleccionada+"</h2>");
+    $("#tablaCabecera").append("<th>"+emailSeleccionada+"</th><th></th> <th>"+"Yo"+"</th>");
+    recarga();
+    setInterval('recarga()',1000)
+</script>

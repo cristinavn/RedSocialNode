@@ -31,6 +31,22 @@ module.exports = function(app, gestorBD){
             }
         })
     });
+    app.post("/api/mensajes/:email", function (req, res) {
+        var criterio = {$and:[{destino:res.usuario, emisor:req.params.email}]};
+        gestorBD.leerMensajes( criterio, function(mensajes) {
+            if (mensajes == null) {
+                res.status(500);
+                res.json( {
+                    error : "Se ha producido un error"
+                });
+            } else {
+                res.status(201);
+                res.json({
+                    mensaje: "Mensajes leidos"
+                })
+            }
+        })
+    });
 
     app.post("/api/autenticar/", function(req,res) {
         var seguro = app.get("crypto").createHmac('sha256', app.get('clave'))
