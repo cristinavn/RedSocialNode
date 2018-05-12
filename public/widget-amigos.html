@@ -8,7 +8,7 @@
 <div id="widget-amigos" >
     <h2>Lista de amigos</h2>
     <input type="text" class="form-control" placeholder="Filtrar por nombre"
-           id="filtro-nombre" name="busqueda"/>
+           id="filtro-nombre" name="buscar"/>
     <table class="table table-hover">
         <thead>
         <tr>
@@ -63,9 +63,9 @@
         var amigosFiltrados = [];
         var nombreFiltro = $("#filtro-nombre").val().toLowerCase();
 
-        for (i = 0; i < canciones.length; i++) {
-            if (canciones[i].nombre.toLowerCase().indexOf(nombreFiltro) != -1 ){
-                amigosFiltrados.push(canciones[i]);
+        for (i = 0; i < amigos.length; i++) {
+            if (amigos[i].nombre.toLowerCase().indexOf(nombreFiltro) != -1 ){
+                amigosFiltrados.push(amigos[i]);
             }
         }
         actualizarTabla(amigosFiltrados);

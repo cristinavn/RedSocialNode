@@ -23,7 +23,7 @@
     </div>
     <div class="collapse navbar-collapse" id="myNavbar">
       <ul class="nav navbar-nav" id="barra-menu">
-        <li><a onclick=widgetCanciones()>Canciones</a></li>
+        <li><a onclick=widgetAmigos()>Amigos</a></li>
       </ul>
       <ul class="nav navbar-nav navbar-right" id="barra-menu-derecha">
 		<!-- Opciones de menú aqui -->
@@ -60,6 +60,11 @@
         }
 
     }
+
+    function widgetAmigos() {
+        $( "#contenedor-principal" ).load("widget-amigos.html");
+    }
+
 </script>
 </body>
 </html>
