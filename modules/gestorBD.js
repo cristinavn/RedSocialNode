@@ -260,7 +260,7 @@ module.exports = {
             } else {
                 var collection = db.collection('amigos');
                 var atributo = {aceptada:true};
-                collection.update(criterio, {$set: atributo}, function(err, result) {
+                collection.updateOne(criterio, {$set: atributo}, function(err, result) {
                     if (err) {
                         funcionCallback(null);
                     } else {

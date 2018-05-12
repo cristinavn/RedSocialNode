@@ -69,7 +69,7 @@
         $.ajax({
             url: "http://localhost:8081/invitacion/acept/"+texts, type: "POST", data: {},
             dataType: 'json',
-            success: function(respuesta) {
+            success: function() {
                 location.reload();
             },
         });

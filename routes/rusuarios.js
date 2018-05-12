@@ -82,7 +82,8 @@ module.exports = function(app,swig,gestorBD) {
     app.post("/invitacion/acept/:email", function (req, res) {
         console.log("aceptar invitacion");
         var criterio = {
-            emisor: req.params.email
+            emisor: req.params.email,
+            receptor: req.session.usuario
         }
         gestorBD.aceptarInvitacion(criterio, function (id) {
             if (id == null) {
