@@ -1,6 +1,7 @@
 module.exports = function(app,swig,gestorBD) {
 	
 	app.get("/usuario", function(req, res) {
+        console.log("obteniendo usuarios");
         var criterio = {};
         if( req.query.busqueda != null ){
             criterio = { $or :[{"nombre" : {$regex : ".*"+req.query.busqueda+".*"}},{"email": {$regex : ".*"+req.query.busqueda+".*"}}]};
@@ -36,6 +37,7 @@ module.exports = function(app,swig,gestorBD) {
 	});
 
 	app.get("/invitaciones", function(req, res){
+        console.log("obteniendo invitaciones");
         var pg = parseInt(req.query.pg); // Es String !!!
         if ( req.query.pg == null){ // Puede no venir el param
             pg = 1;
@@ -56,6 +58,7 @@ module.exports = function(app,swig,gestorBD) {
     });
 
     app.get("/amigos", function(req, res){
+        console.log("obteniendo amigos");
         var pg = parseInt(req.query.pg); // Es String !!!
         if ( req.query.pg == null){ // Puede no venir el param
             pg = 1;
@@ -77,6 +80,7 @@ module.exports = function(app,swig,gestorBD) {
     });
 
     app.post("/invitacion/acept/:email", function (req, res) {
+        console.log("aceptar invitacion");
         var criterio = {
             emisor: req.params.email
         }
@@ -97,6 +101,7 @@ module.exports = function(app,swig,gestorBD) {
     })
 
     app.get("/invitacion/:email", function (req, res) {
+        console.log("crear invitacion");
         gestorBD.obtenerUsuario({email:req.session.usuario},function (usuario) {
             var emisor=usuario.nombre;
             var eid = usuario._id.toString();
@@ -140,6 +145,7 @@ module.exports = function(app,swig,gestorBD) {
     });
 
     app.post('/signup', function(req, res) {
+        console.log("creando usuario");
         if (req.body.password != req.body.passwordConfirm)
             res.redirect("/signup?mensaje=Error al registrar usuario: las contraseñas no coinciden&tipoMensaje=alert-danger");
         else {
@@ -182,16 +188,18 @@ module.exports = function(app,swig,gestorBD) {
                 req.session.usuario = usuarios[0].email;
                 res.redirect("/usuario");
             }
+            console.log("usuario "+usuarios[0].email+" acaba de acceder");
         });
     });
 
     app.get('/logout', function (req, res) {
+        console.log("usuario "+ req.session.usuario+" logout");
         req.session.usuario = null;
-        res.redirect("/tienda");
+        res.redirect("/login");
     })
 
     app.get('/borrarTodo', function (req, res) {
         gestorBD.eliminarTodo();
-        res.redirect("/tienda");
+        res.redirect("/login");
     })
 };
