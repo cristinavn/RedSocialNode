@@ -244,9 +244,11 @@ module.exports = {
     },
     eliminarTodo : function(funcionCallback){
         this.mongo.MongoClient.connect(this.app.get('db'), function(err, db) {
-            db.collection('usuarios').deleteMany({});
+            //db.collection('usuarios').deleteMany({});
+            db.collection('usuarios').remove({email:{$nin:["ivan@prueba.es", "maria@prueba.es", "sara@prueba.es", "ana@prueba.es"]}});
             db.collection('amigos').deleteMany({});
-            db.collection('mensajes').remove({texto:"ivan"});
+            db.collection('mensajes').remove({texto:"Ivan"});
+            db.collection('mensajes').remove({texto:"Encantada de conocerte"});
         });
     },
 

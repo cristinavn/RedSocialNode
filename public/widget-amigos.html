@@ -48,7 +48,10 @@
         for (i = 0; i < cancionesMostrar.length; i++) {
             $( "#tablaCuerpo" ).append(
                 "<tr>"+
-                "<td><a id="+cancionesMostrar[i].email+" onclick=mostrarMensajes('"+cancionesMostrar[i].email+"')>"+cancionesMostrar[i].nombre+"</a></td>" +
+                "<td>" +
+                "<a id="+cancionesMostrar[i].email+"+ onclick=mostrarMensajes('"+cancionesMostrar[i].email+"')>" +
+                ""+cancionesMostrar[i].nombre+"</a>" +
+                "</td>" +
                 "<td>"+cancionesMostrar[i].email+"</td>" +
                 "</tr>" );
         }
