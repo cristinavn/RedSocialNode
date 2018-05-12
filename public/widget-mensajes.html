@@ -80,6 +80,7 @@
                 "token" : token
             },
             success : function(mensajes) {
+                $("#mensaje").val("");
                 recarga();
             },
             error : function(error) {
