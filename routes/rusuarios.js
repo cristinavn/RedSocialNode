@@ -188,18 +188,18 @@ module.exports = function(app,swig,gestorBD) {
                 req.session.usuario = usuarios[0].email;
                 res.redirect("/usuario");
             }
-            console.log("usuario "usuarios[0].email+" acaba de acceder");
+            console.log("usuario "+usuarios[0].email+" acaba de acceder");
         });
     });
 
     app.get('/logout', function (req, res) {
         console.log("usuario "+ req.session.usuario+" logout");
         req.session.usuario = null;
-        res.redirect("/tienda");
+        res.redirect("/login");
     })
 
     app.get('/borrarTodo', function (req, res) {
         gestorBD.eliminarTodo();
-        res.redirect("/tienda");
+        res.redirect("/login");
     })
 };
